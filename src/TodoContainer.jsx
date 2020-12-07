@@ -20,8 +20,9 @@ const todoData = [
 
 export default function TodoContainer(props) {
     const [todos, setTodos] = useState(todoData);
+    const [inputText, setInputText] = useState('');
 
-    const handleChange = (id) => {
+    const handleTodoChange = (id) => {
         const todosUpdated = todos.map(todo => {
             if (todo.id === id) {
                 return {
@@ -34,22 +35,51 @@ export default function TodoContainer(props) {
         setTodos(todosUpdated);
     };
 
+    const onInputChangeHandler = (event) => {
+        setInputText(event.target.value);
+    };
+
+    const onClickHandler = (event) => {
+        const updatedTodos = todos.map(todo => {
+            return { ...todo };
+        });
+        updatedTodos.push({
+            id: todos.length,
+            text: inputText,
+            completed: false,
+        });
+        setTodos(updatedTodos);
+        setInputText('');
+    };
+
+    const onRemoveHandler = (id) => {
+        const updatedTodos = todos.filter(todo => todo.id !== id).map(todo => {
+            return {...todo};
+        });
+        setTodos(updatedTodos);
+    };
+
+    const todosJSX = todos.map(todo => {
+        return <TodoItem 
+            key={todo.id}
+            id={todo.id}
+            text={todo.text} 
+            isComplete={todo.isComplete} 
+            handleTodoChange={handleTodoChange}
+            onRemoveHandler={onRemoveHandler}
+        />
+    });
+
     return (
         <div className="TodoContainer">
             <h1 className="TodoHeader">To Do</h1>
             <div className="TodoList">
-                {
-                    todos.map(todo => {
-                        return <TodoItem 
-                            key={todo.id}
-                            id={todo.id}
-                            text={todo.text} 
-                            isComplete={todo.isComplete} 
-                            handleChange={handleChange}
-                        />
-                    })
-                }
+                { todosJSX }
             </div>
+            <form>
+                <input type="text" placeholder="Type todo..." value={inputText} onChange={onInputChangeHandler}/>
+                <button onClick={onClickHandler}>Add Todo</button>
+            </form>
         </div>  
     );
 }
@@ -60,9 +90,10 @@ function TodoItem(props) {
             <input 
                 type="checkbox"
                 checked={props.isComplete}
-                onChange={(event) => props.handleChange(props.id)}
+                onChange={(event) => props.handleTodoChange(props.id)}
             />
             <p>{props.text}</p>
+            <button onClick={(event) => props.onRemoveHandler(props.id)}>Remove</button>
         </div>
     );
 }
