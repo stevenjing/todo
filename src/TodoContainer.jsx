@@ -39,7 +39,8 @@ export default function TodoContainer(props) {
         setInputText(event.target.value);
     };
 
-    const onClickHandler = (event) => {
+    const onSubmitHandler = (event) => {
+        event.preventDefault();
         const updatedTodos = todos.map(todo => {
             return { ...todo };
         });
@@ -76,11 +77,28 @@ export default function TodoContainer(props) {
             <div className="TodoList">
                 { todosJSX }
             </div>
+            <TodoInput 
+                inputText={inputText}
+                onInputChangeHandler={onInputChangeHandler}
+                onSubmitHandler={onSubmitHandler}
+            />
+        </div>
+    );
+}
+
+function TodoInput(props) {
+    return (
+        <div>
             <form>
-                <input type="text" placeholder="Type todo..." value={inputText} onChange={onInputChangeHandler}/>
-                <button onClick={onClickHandler}>Add Todo</button>
+                <input 
+                    type="text" 
+                    placeholder="Type todo..." 
+                    onChange={props.onInputChangeHandler}
+                    value={props.inputText} 
+                />
+                <button onClick={props.onSubmitHandler}>Add Todo</button>
             </form>
-        </div>  
+        </div>
     );
 }
 
