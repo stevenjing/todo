@@ -3,21 +3,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #F0F0F0;
 }
 
-.TodoContainer {
-  border: 1px solid black;
-  height: 400px;
-  width: 700px;
-}
-
-.TodoHeader {
-  width: 100%;
-  height: 20%;
-  border-bottom: 1px solid black;
-  text-align: center;
-  margin: 0;
-}
 
 .TodoList {
   width: 100%;

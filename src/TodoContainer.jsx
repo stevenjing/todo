@@ -1,4 +1,11 @@
 import { useState } from 'react';
+import 'semantic-ui-css/semantic.min.css'
+import { 
+    Container,
+    Form,
+    Header,
+    Segment,
+} from 'semantic-ui-react'
 
 const todoData = [
     {
@@ -61,57 +68,77 @@ export default function TodoContainer(props) {
     };
 
     const todosJSX = todos.map(todo => {
-        return <TodoItem 
-            key={todo.id}
-            id={todo.id}
-            text={todo.text} 
-            isComplete={todo.isComplete} 
-            handleTodoChange={handleTodoChange}
-            onRemoveHandler={onRemoveHandler}
-        />
+        return (
+            <TodoItem 
+                key={todo.id}
+                id={todo.id}
+                text={todo.text} 
+                isComplete={todo.isComplete} 
+                handleTodoChange={handleTodoChange}
+                onRemoveHandler={onRemoveHandler}
+            />
+        );
     });
 
     return (
-        <div className="TodoContainer">
-            <h1 className="TodoHeader">To Do</h1>
-            <div className="TodoList">
+        <Container style={{backgroundColor: 'white'}}>
+            <Header 
+                size="huge"
+                textAlign="center"
+                style={{margin: 10}}
+            >To Do</Header>
+            <Segment.Group style={{overflow: 'auto', maxHeight: 300}}>
                 { todosJSX }
-            </div>
-            <TodoInput 
+            </Segment.Group>
+            <TodoInputForm 
                 inputText={inputText}
                 onInputChangeHandler={onInputChangeHandler}
                 onSubmitHandler={onSubmitHandler}
             />
-        </div>
+        </Container>
     );
 }
 
-function TodoInput(props) {
+function TodoInputForm(props) {
     return (
-        <div>
-            <form>
-                <input 
-                    type="text" 
+        <Form>
+            <Form.Group>
+                <Form.Input 
+                    fluid 
                     placeholder="Type todo..." 
                     onChange={props.onInputChangeHandler}
                     value={props.inputText} 
+                    width={12}
                 />
-                <button onClick={props.onSubmitHandler}>Add Todo</button>
-            </form>
-        </div>
+                <Form.Button 
+                    onClick={props.onSubmitHandler}
+                    width={2}
+                >Add Todo</Form.Button>
+            </Form.Group>
+        </Form>
     );
 }
 
 function TodoItem(props) {
     return (
-        <div className="TodoItem">
-            <input 
-                type="checkbox"
-                checked={props.isComplete}
-                onChange={(event) => props.handleTodoChange(props.id)}
-            />
-            <p>{props.text}</p>
-            <button onClick={(event) => props.onRemoveHandler(props.id)}>Remove</button>
-        </div>
+        <Segment vertical>
+            <Form style={{marginLeft: 20, marginTop: 10}}>
+                <Form.Group>
+                    <Form.Checkbox 
+                        label={props.text}
+                        checked={props.isComplete}
+                        onChange={(event) => props.handleTodoChange(props.id)}
+                        width={12}
+                    />
+                    <Form.Button 
+                        basic
+                        content="Remove"
+                        color="red"
+                        onClick={(event) => props.onRemoveHandler(props.id)}
+                        width={2}
+                    />
+                </Form.Group>
+            </Form>
+        </Segment>
     );
 }
